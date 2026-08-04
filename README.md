@@ -3,7 +3,7 @@
 A simple test README for the `attire` workspace.
 
 ## Project Structure
-- `ReadMe.md` — project documentation.
+- `ReadMe.md` - project documentation.
 
 ## Overview
 
