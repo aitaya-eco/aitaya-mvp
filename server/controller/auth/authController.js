@@ -1,8 +1,8 @@
-const {supabase} = require("../../config/supabase");
+const { supabase } = require("../../config/supabase");
 
 const registerUser = (req, res) => {
   // Logic for registering a user goes here
-  const {email, password, confirmPassword} = req.body;
+  const { email, password, confirmPassword } = req.body;
 
   // This checks for empty fields and returns an error message if any of the required fields are missing.
   if (!email || !password || !confirmPassword) {
@@ -17,4 +17,8 @@ const registerUser = (req, res) => {
   res.json({ message: `${email.split("@")[0]} registered successfully` });
 };
 
-module.exports = { registerUser };
+const loginUser = (req, res) => {
+  // This is the logic for Logging in a user goes here
+};
+
+module.exports = { registerUser, loginUser };
