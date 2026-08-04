@@ -1,3 +1,26 @@
 # Dependencies
-client/node_modules/
-server/node_modules/
+node_modules/
+
+# Environment files
+client/.env
+server/.env
+
+# Or ignore all env files in both folders
+client/.env*
+server/.env*
+
+# Keep example files
+!client/.env.example
+!server/.env.example
+
+# Build folders
+client/dist/
+server/dist/
+build/
+
+# Logs
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
