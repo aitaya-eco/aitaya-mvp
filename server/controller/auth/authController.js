@@ -1,24 +1,62 @@
 const { supabase } = require("../../config/supabase");
+const { generateOtp } = require("../../utils/generateOtp");
+const { sendEmail } = require("../../utils/sendEmail");
 
-const registerUser = (req, res) => {
-  // Logic for registering a user goes here
-  const { email, password, confirmPassword } = req.body;
+const registerUserEmail = async (req, res) => {
+  const { email } = req.body;
 
-  // This checks for empty fields and returns an error message if any of the required fields are missing.
-  if (!email || !password || !confirmPassword) {
-    return res.status(400).json({ message: "All fields are required" });
+  if (!email || !email.trim()) {
+    return res.status(400).json({ message: "Email is required" });
   }
 
-  // This compares the password and confirmPassword fields to ensure they match. If they don't match, it returns an error message indicating that the passwords do not match.
-  if (password !== confirmPassword) {
-    return res.status(400).json({ message: "Passwords do not match" });
+  const normalizedEmail = email.trim().toLowerCase();
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  if (!emailRegex.test(normalizedEmail)) {
+    return res
+      .status(400)
+      .json({ message: "Please provide a valid email address" });
   }
 
-  res.json({ message: `${email.split("@")[0]} registered successfully` });
+  try {
+    const otp = await generateOtp();
+
+    await sendEmail(
+      normalizedEmail,
+      "Your attire verification code",
+      `Your verification code is ${otp}. Use it to complete your registration.`,
+    );
+
+    const { data, error } = await supabase.auth.admin.createUser({
+      email: normalizedEmail,
+      password: otp,
+      email_confirm: true,
+      user_metadata: {
+        otp,
+      },
+    });
+
+    if (error) {
+      return res.status(400).json({
+        message: error.message || "Unable to create user",
+      });
+    }
+
+    return res.status(201).json({
+      message: "Verification code sent successfully",
+      user: data?.user || null,
+    });
+  } catch (error) {
+    console.error("Registration error:", error);
+
+    return res.status(500).json({
+      message: "Server error while registering user",
+    });
+  }
 };
 
 const loginUser = (req, res) => {
   // This is the logic for Logging in a user goes here
 };
 
-module.exports = { registerUser, loginUser };
+module.exports = { registerUserEmail, loginUser };
