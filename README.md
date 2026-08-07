@@ -1,3 +1,3 @@
-### Attire
+### Aitaya
 
-This a README for the `attire` workspace.
+This a README for the `aitaya` workspace.
