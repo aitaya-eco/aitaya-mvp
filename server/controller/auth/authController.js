@@ -1,5 +1,5 @@
 const bcrypt = require("bcryptjs");
-const { supabase } = require("../../config/supabase");
+const { supabase, supabaseAdmin } = require("../../config/supabase");
 const { generateOtp } = require("../../utils/generateOtp");
 const { sendEmail } = require("../../utils/sendEmail");
 const { generateRegToken } = require("../../utils/genRegToken");
@@ -187,7 +187,7 @@ const createPassword = async (req, res) => {
     }
 
     const { data: authData, error: authError } =
-      await supabase.auth.admin.createUser({
+      await supabaseAdmin.auth.admin.createUser({
         email,
         password,
         email_confirm: true,
