@@ -225,7 +225,7 @@ const createPassword = async (req, res) => {
   }
 };
 
-const loginUser = (req, res) => {
+const loginUser = async (req, res) => {
   // This is the logic for Logging in a user goes here
 
   try {
