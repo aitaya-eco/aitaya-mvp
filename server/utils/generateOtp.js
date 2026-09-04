@@ -3,7 +3,7 @@ const generateOtp = async (length = 6) => {
     "",
   );
 
-  return `attire-${otp}`;
+return otp;
 };
 
 module.exports = { generateOtp };
