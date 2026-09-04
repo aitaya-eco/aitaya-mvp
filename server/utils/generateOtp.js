@@ -1,9 +1,9 @@
-const generateOtp = async (length = 6) => {
-  const otp = Array.from({ length }, () => Math.floor(Math.random() * 10)).join(
-    "",
-  );
+const crypto = require("crypto");
 
-return otp;
+const generateOtp = async (length = 6) => {
+  const otp = Array.from({ length }, () => crypto.randomInt(0, 10)).join("");
+
+  return otp;
 };
 
 module.exports = { generateOtp };
