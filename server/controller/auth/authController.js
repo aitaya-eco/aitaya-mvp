@@ -27,12 +27,16 @@ const registerUserEmail = async (req, res) => {
     const otp = await generateOtp();
     const otpHash = await bcrypt.hash(otp, 10);
 
-    const { error } = await supabase.from("pending_registrations").insert({
-      email: normalizedEmail,
-      otp_hash: otpHash,
-      expires_at: new Date(Date.now() + 10 * 60 * 1000),
-      registration_step: "email_pending",
-    });
+        const { error } = await supabase.from("pending_registrations").upsert(
+      {
+        email: normalizedEmail,
+        otp_hash: otpHash,
+        expires_at: new Date(Date.now() + 10 * 60 * 1000),
+        registration_step: "email_pending",
+        email_verified: false,
+      },
+      { onConflict: "email" },
+    );
 
     if (error) {
       return res.status(400).json({
